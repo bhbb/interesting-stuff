@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# this script check wheter the changed files follow the
+# kernel coding style. If not it aborts the commit
+
+STAGED_FILES=$(git diff --name-only --cached)
+GIT_DIR=$(git rev-parse --show-toplevel)
+
+ABORT_COMMIT=0
+# checkpatch script can only run from top-level kernel-dir...
+cd $GIT_DIR
+
+for file in $STAGED_FILES
+do
+	./scripts/checkpatch.pl --file --terse ./$file
+	if [ $? -ne "0" ]
+	then
+		let "ABORT_COMMIT++"
+	fi
+done
+
+if [ $ABORT_COMMIT -ne "0" ]
+then
+	echo "$ABORT_COMMIT files did not follow the kernel coding style..."
+fi
+
+exit $ABORT_COMMIT
