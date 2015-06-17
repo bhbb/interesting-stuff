@@ -3,6 +3,16 @@
 # this script check wheter the changed files follow the
 # kernel coding style. If not it aborts the commit
 
+# bash restrict mode
+# word splitting by space anymore
+IFS=$'\t\n'
+# report unbound variables
+set -u
+# if any command in a pipe fails use this as exit code and not the exit code from the last executed command (default)
+set -o pipefail
+
+
+
 STAGED_FILES=$(git diff --name-only --cached)
 GIT_DIR=$(git rev-parse --show-toplevel)
 
