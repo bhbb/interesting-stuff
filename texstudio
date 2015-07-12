@@ -1,0 +1,17 @@
+# This is a very simplebash completion script for texstudio
+# Instead of expanding to all file externsions, it extends
+# now only to tex and bib files
+
+texstudio_file_extension() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    # add further file extension here WITHOUT space between comma
+    FILES_EXTENSION="tex,bib"
+
+    	local names=$(for x in $(eval ls *.{${FILES_EXTENSION}}); do echo $x; done)
+        COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
+        return 0
+}
+complete -F texstudio_file_extension texstudio
