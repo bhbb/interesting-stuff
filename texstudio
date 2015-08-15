@@ -7,11 +7,15 @@ texstudio_file_extension()
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
-    # add further file extension here WITHOUT space between comma
-    FILES_EXTENSION="tex,bib"
+    names=""
+    FILES_EXTENSION="tex bib"
+    	for ext in $FILES_EXTENSION
+	do
+		local names_tmp=$(find -name "*.$ext")
+		names="${names} ${names_tmp}"
+	done
 
-    	local names=$(for x in $(eval ls *.{${FILES_EXTENSION}}); do echo $x; done)
-        COMPREPLY=( $(compgen -W "${names}" -- ${cur}) )
+	COMPREPLY=( $(compgen -W "${names}" -- "${cur}") )
         return 0
 }
 complete -F texstudio_file_extension texstudio
